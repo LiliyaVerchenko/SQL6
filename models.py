@@ -1,13 +1,15 @@
 import sqlalchemy as sq
-from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
-from sqlalchemy import func
-engine = sq.create_engine('postgresql+psycopg2://postgres:Shitko77$@localhost:5432/book')
+
+login = 'postgres'
+kod = 'Shitko77'
+
+engine = sq.create_engine(f'postgresql+psycopg2://{login}:{kod}$@localhost:5432/book')
 connection = engine.connect()
 Session = sessionmaker(bind=engine)
 Session.configure(bind=engine)
+
 
 Base = declarative_base()
 class Publisher(Base):
@@ -33,6 +35,8 @@ class Stock(Base):
     id_book = sq.Column(sq.Integer, sq.ForeignKey('book.id'), primary_key=True)
     id_shop = sq.Column(sq.Integer, sq.ForeignKey('shop.id'), primary_key=True)
     count = sq.Column(sq.Integer)
+
+Base.metadata.create_all(engine)
 
 publ_input = int(input('Введите идентификатор целевого издателя '))
 if __name__ == '__main__':
